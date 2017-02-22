@@ -1,6 +1,6 @@
 # Invoice-webapp
 
-Aplicação para emissão de notas fiscais.
+Aplicação para emissão de notas fiscais. /
 Funcionalidades:
 - Cadastro de Clientes
 - Cadastro de Empresas
