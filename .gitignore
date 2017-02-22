@@ -1,4 +1,8 @@
 /node_modules/
 bbower_components/
 /bower_components/*
+<<<<<<< HEAD
 !/bower_components/chart.js/*
+=======
+!/bower_components/chart.js/*
+>>>>>>> gh-pages
