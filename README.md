@@ -18,6 +18,7 @@ browser-sync </br>
 `git clone https://github.com/imktec/invoice-webapp.git` </br>
 `cd invoice-webapp` </br>
 `npm install` </br>
+`bower install` </br>
 `gulp serve` </br>
 http://localhost:3000/
 
