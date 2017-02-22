@@ -1,0 +1,4 @@
+/node_modules/
+bbower_components/
+/bower_components/*
+!/bower_components/chart.js/*
