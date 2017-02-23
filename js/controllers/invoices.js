@@ -12,7 +12,9 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
   			$scope.details = null;
 			$scope.apiUrl = 'http://localhost:9000/invoice';
 			$scope.selectedItem = null;
-			$scope.item = null;
+			$scope.items = [];
+			$scope.qtdeItems = 0;
+			$scope.termInvoice = null;
 
   			$scope.cliente =  {
 			      name : "",
@@ -36,12 +38,12 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 					paymentStatus: null,
 					shippingDate: null,
 					shippingStatus: null,
-					total: null,
+					total: 0,
 					discount: null,
 					sinal: null,
 					cost: null,
 					statusProcess: "PROCESSING",
-					totalTaxes: null,
+					totalTaxes: 0,
 					customer :  {
 								name : "",
 								email : "",
@@ -69,7 +71,7 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 							createDate : null,
 					},
 
-					items: null
+					items: []
 			}
 
 			// Function to get employee details from the database
@@ -100,6 +102,7 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 				$('#editForm').css('display', 'none');
 			}
 			$scope.insertInfo = function(info) {
+				console.log(info);
 				$http.post('http://localhost:9000/invoice', 
 					JSON.stringify(info)).then(function(data) {
 						//$rootScope.$broadcast('updateList');
@@ -110,8 +113,37 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 				
 				$rootScope.$broadcast('updateList');
 			}
-			$scope.removeItem = function() {
-				console.log("delete");
+
+			$scope.filterByCompanyOrItem = function() {
+				
+				$rootScope.$broadcast('filterByCompanyOrItem',
+				{
+					term : $scope.termInvoice
+				});
+			}
+
+			
+			
+			$scope.updateItems = function($index) {
+				var total =  parseFloat($scope.invoice.total) + ( parseFloat($scope.invoice.items[$index].price)* parseFloat($scope.invoice.items[$index].quantity));
+				$scope.invoice.total = total;	
+			}
+
+			$scope.removeItem = function($index) {
+
+				var total =  parseFloat($scope.invoice.total) - parseFloat($scope.invoice.items[$index].price);
+				$scope.invoice.total = total;
+				$scope.qtdeItems = $scope.qtdeItems - 1;
+				$scope.invoice.items.splice($index,1);    
+			}
+			$scope.addItem = function(item) {
+				item.quantity = 1;
+				var total =  parseFloat($scope.invoice.total) + ( parseFloat(item.price)* parseFloat(item.quantity));
+				$scope.qtdeItems += 1;
+				$scope.invoice.total = total;
+				$scope.invoice.items.push(item);
+				$scope.items = [];
+				$scope.term = '';
 			}
 			$scope.format = function(text) {
 				var position = text.indexOf(":");
@@ -146,22 +178,26 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 				$('#editForm').css('display', 'none');
 			}
 			
-			$scope.localSearch = function(str) {
-				console.log(str);
-				var matches = [];
-
-					$http.get('http://localhost:9000/item?nome='+str)
+			$scope.localSearch = function() {
+				console.log($scope.term);
+				$scope.items = [];
+				if($scope.term.length > 2) {
+					$http.get('http://localhost:9000/item?nome='+$scope.term)
 				
 				     .then(function successCallback(response) {
 							//response.data;
-						
-							console.log("Entrou" + response);
+							$scope.items = response.data;
+							//console.log(reponse.data);
 						}, function errorCallback(response) {
 		    				console.log(response);
 		    		});
-
-				return matches;
+				} else {
+					$scope.items = [];
+				}
+				
 			};
+
+			
 			$scope.selectedHandle = function ($item) {
 				console.log($item);
 				//$item.title // or description, or image - from your angucomplete attribute configuration
@@ -178,6 +214,7 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
   			
   			$scope.details = null;
   			$scope.loadList = getInfo();
+			$scope.term = null;
 		
 
 			// Function to get employee details from the database
@@ -186,7 +223,29 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 				console.log("update list");
            		getInfo();
         	});
-
+			$rootScope.$on("filterByCompanyOrItem", function(event, args){
+				console.log("filterByCompanyOrItem");
+				console.log(args);
+           		filterByCompanyOrItem(args.term);
+        	});
+			function filterByCompanyOrItem(term) {
+				console.log(term);
+				$scope.items = [];
+				if(term.length > 2) {
+					$http.get('http://localhost:9000/invoice?filteByCompanyOrItem='+term)
+				
+				     .then(function successCallback(response) {
+							//response.data;
+							$scope.details = response.data;
+							//console.log(reponse.data);
+						}, function errorCallback(response) {
+		    				console.log(response);
+		    		});
+				} else {
+					$scope.details = [];
+				}
+				
+			}
 			function getInfo() {
 				$http.get('http://localhost:9000/invoice')
 				

@@ -17,7 +17,13 @@
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> </button>
                                     </span>
-                                    <input type="text" id="input1-group2" name="input1-group2" class="form-control" placeholder="Nome do Item">
+                                    <input type="text" 
+                                    id="input1-group2" 
+                                    name="input1-group2" 
+                                    class="form-control" 
+                                     ng-model="term"
+                                        ng-keyup="localSearch()"
+                                    placeholder="Nome do Item">
 
                                 </div>
                             </div>
@@ -54,41 +60,30 @@
                 <div class="card-block">
                     <form action="" method="post" enctype="multipart/form-data" class="form-horizontal ">
                        <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="text-input">* Nome Completo</label>
+                            <label class="col-md-3 form-control-label" for="text-input">* Nome Produto</label>
                             <div class="col-md-9">
-                                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Nome" ng-model="cliente.name">
+                                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Nome" ng-model="item.name">
                                 <span class="help-block"></span>
                             </div>
                         </div>
+
                         <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="text-input">Telefone</label>
-                            <div class="col-md-4">
-                                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tel" ng-model=" cliente.phone">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-3 form-control-label">Sexo</label>
+                            <label class="col-md-3 form-control-label" for="text-input">* Valor Produto</label>
                             <div class="col-md-9">
-                                <label class="radio-inline" for="inline-radio1">
-                                    <input type="radio" id="inline-radio1" name="inline-radios"  ng-model="cliente.gender" value="M"> Masculino
-                                </label>
-                                <label class="radio-inline" for="inline-radio2">
-                                    <input type="radio" ng-model="cliente.gender" id="inline-radio2" name="inline-radios" value="F"> Feminino
-                                </label>
-                                
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="email-input">Email</label>
-                            <div class="col-md-4">
-                                <input type="email" id="email-input" 
-                                ng-model="cliente.email"
-                                name="email-input" class="form-control" placeholder="Digite o e-mail">
+                                <input type="text" id="text-input" 
+                                name="text-input" class="form-control" 
+                                placeholder="Nome" ng-model="item.price">
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                        
+                      
+                         <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="text-input">NCM</label>
+                            <div class="col-md-9">
+                                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Nome" ng-model="item.ncm">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
                         
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="textarea-input">Observações</label>
@@ -100,7 +95,7 @@
                     </form>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-sm btn-primary" ng-click="insertInfo(cliente)" ><i class="fa fa-dot-circle-o"></i> Salvar</button>
+                    <button type="submit" class="btn btn-sm btn-primary" ng-click="insertInfo(item)" ><i class="fa fa-dot-circle-o"></i> Salvar</button>
                     <button type="reset" class="btn btn-sm btn-danger" ng-click="init()"><i class="fa fa-ban"></i> Limpar</button>
                 </div>
             </div>   
@@ -133,12 +128,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="detail in details._embedded.customer">
+                            <tr ng-repeat="detail in details">
                                 <td>{{detail.name}}</td>
-                                <td>{{detail.createDate  | date:'dd/MM/yyyy HH:mm:ss' }}</td>
-                                <td>25</td>
+                                <td>{{detail.price}}</td>
+                                <td>{{detail.ncm}}</td>
                                 <td>
-                                    <span class="tag tag-success">Ativo</span>
+                                    <span class="tag tag-success">{{detail.statusProcess == 'PROCESSED'? 'Ativo': 'Ativando'}}</span>
                                 </td>
                             </tr>
                             

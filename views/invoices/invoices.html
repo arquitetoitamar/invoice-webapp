@@ -17,7 +17,11 @@
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> </button>
                                     </span>
-                                    <input type="text" id="input1-group2" name="input1-group2" class="form-control" placeholder="Emissor, Mercadoria">
+                                    <input type="text" 
+                                    ng-model="termInvoice"
+                                    ng-keyup="filterByCompanyOrItem()"
+                                    id="input1-group2" name="input1-group2" 
+                                    class="form-control" placeholder="Emissor, Mercadoria">
 
                                 </div>
                             </div>
@@ -115,32 +119,22 @@
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> </button>
                                     </span>
-                                   <!--<angucomplete-alt id="members"
-                                        placeholder="Buscar Items"
-                                        pause="400"
-                                        selected-object="item"
-                                        remote-url="http://localhost:9000/item?nome="
-                                        remote-url-data-field="invoice.items"
-                                        title-field="name"
-                                        description-field="name"
-                                        image-field="profilePic"
-                                        input-class="form-control form-control-small"/>-->
-                                        <angucomplete-alt id="ex2"
-                                            placeholder="Buscar Items"
-                                            pause="300"
-                                            selected-object="selectedHandle"
-                                            local-data="item"
-                                            local-search="localSearch"
-                                            title-field="name"
-                                            description-field="name"
-                                            image-field="pic"
-                                            minlength="1"
-                                            input-class="form-control form-control-small"
-                                            match-class="highlight" />
-
-                                    
+                                   <input type="text" 
+                                        ng-model="term"
+                                        ng-keyup="localSearch()"
+                                        id="input1-group2" 
+                                        name="input1-group2" 
+                                        class="form-control" 
+                                        placeholder="Buscar Items">
+                                                                           
                                 </div>
-                    <table class="table table-striped">
+                                <div class="card" ng-if="items.length > 0">
+                                <div class="card-header">
+                                    <i class="fa fa-align-justify"></i> Produtos Cadastrados
+                                </div>
+                                <div class="card-block">
+                                <div class="table-responsive">
+                        <table class="table table-striped" >
                         <thead>
                             <tr>
                                 <th>Nome</th>
@@ -150,17 +144,52 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr ng-repeat="item in items">
+                                <td>{{item.name}}</td>
+                                <td>{{item.price}}</td>
+                                <td><span class="btn btn-success btn-sm"  
+                                        title="Adicionar na Nota"
+                                        ng-click="addItem(item)" >
+                                <i class="fa fa-plus"></span></td>
+                               
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                    </div>
+                    </div>
+                    </div>
+                    <hr>
+                    <table class="table table-striped" ng-if="invoice.items.length > 0">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Valor</th>
+                                <th>Quantidade</th>
+                                <th></th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
                             <tr ng-repeat="item in invoice.items">
                                 <td>{{item.name}}</td>
                                 <td>{{item.price}}</td>
-                                <td><span class="btn btn-danger btn-sm"  ng-click="removeItem()" >
+                                <td><input type="text" 
+                                        ng-model="item.quantity"
+                                        ng-keyup="updateItems($index)"
+                                        id="input1-group2" 
+                                        name="input1-group2" 
+                                        class="form-control small"/></td>
+                                <td><span class="btn btn-danger btn-sm"  
+                                    title="Remover da Nota"
+                                    ng-click="removeItem($index)" >
                                 <i class="fa fa-remove"></span></td>
                                
                             </tr>
                             
                         </tbody>
                     </table>
-                    <ul class="pagination">
+                    <!--<ul class="pagination" ng-if="invoice.items.length > 0">
                         <li class="page-item"><a class="page-link" href="#">Prev</a>
                         </li>
                         <li class="page-item active">
@@ -174,7 +203,16 @@
                         </li>
                         <li class="page-item"><a class="page-link" href="#">Next</a>
                         </li>
-                    </ul>
+                    </ul> -->
+                    <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="text-input">Qtde. Items</label>
+                            <div class="col-md-3">
+                                <input type="text" id="text-input" name="text-input" class="form-control" 
+                                ng-model="qtdeItems"
+                                          disabled>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
                     <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="text-input">Valor da Nota</label>
                             <div class="col-md-3">

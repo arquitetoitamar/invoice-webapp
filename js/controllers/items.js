@@ -10,6 +10,7 @@ itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$root
   			
   			$scope.vm = this;
   			$scope.details = null;
+			$scope.term = '';
 
 
   			$scope.cliente =  {
@@ -25,6 +26,22 @@ itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$root
 					createDate : new Date()
 		     
 		      }
+			$scope.item = {
+					id: 0,
+					dateCreate: new Date(),
+					dateUpdate: null,
+					name: "",
+					ncm: null,
+					description: null,
+					brand: null,
+					category: null,
+					url: null,
+					statusProcess: "PROCESSED",
+					price: "",
+					cost: null,
+					sku: null,
+					thumbnail: null
+			}
 
 			// Function to get employee details from the database
 			init();
@@ -32,7 +49,24 @@ itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$root
 				$log.log("stating aplication");
 				$scope.insert = false;
 			}
-
+			$scope.localSearch = function() {
+				console.log($scope.term);
+				$scope.details = [];
+				if($scope.term.length > 2) {
+					$http.get('http://localhost:9000/item?nome='+$scope.term)
+				
+				     .then(function successCallback(response) {
+							//response.data;
+							$scope.details = response.data;
+							//console.log(reponse.data);
+						}, function errorCallback(response) {
+		    				console.log(response);
+		    		});
+				} else {
+					$scope.details = [];
+				}
+				
+			};
 
 			$scope.setPage = function (pageNo) {
     			$scope.currentPage = pageNo;
@@ -54,7 +88,7 @@ itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$root
 				$('#editForm').css('display', 'none');
 			}
 			$scope.insertInfo = function(info) {
-				$http.post('http://backlaporta.solucaodeti.com:9001/customers', 
+				$http.post('http://localhost:9000/item', 
 					JSON.stringify(info)).then(function(data) {
 						$rootScope.$broadcast('updateList');
 						init();
@@ -73,7 +107,7 @@ itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$root
 				detail.emp_id = $scope.format(detail.$$hashKey);
 				detail.$$hashKey = null;
 				console.log("excluindo: "+JSON.stringify(detail));
-				$http.delete('/employer', JSON.stringify(detail)).success(function(data) {
+				$http.delete('http://localhost:9000/item', JSON.stringify(detail)).success(function(data) {
 					if (data == true) {
 						getInfo();
 					}
@@ -115,7 +149,7 @@ itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$root
         	});
 
 			function getInfo() {
-				$http.get('http://backlaporta.solucaodeti.com:9001/customers?page=0&size=20')
+				$http.get('http://localhost:9000/item?page=0&size=20')
 				
 				.then(function successCallback(response) {
 						$scope.details = response.data;
