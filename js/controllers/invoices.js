@@ -11,6 +11,8 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
   			$scope.vm = this;
   			$scope.details = null;
 			$scope.apiUrl = 'http://localhost:9000/invoice';
+			$scope.selectedItem = null;
+			$scope.item = null;
 
   			$scope.cliente =  {
 			      name : "",
@@ -28,7 +30,7 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 
 			  $scope.invoice =  {
 					id: 0,
-					orderDate: null,
+					orderDate: new Date(),
 					orderStatus: null,
 					datePayment: null,
 					paymentStatus: null,
@@ -40,7 +42,34 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 					cost: null,
 					statusProcess: "PROCESSING",
 					totalTaxes: null,
-					items: []
+					customer :  {
+								name : "",
+								email : "",
+								phone : "",
+								cel : "",
+								address : "",
+								gender : "",
+								document : "",
+								nickname : "",
+								note : "",
+								createDate : new Date()
+						
+					},
+					company : {
+							id : 0,
+							name : null,
+							email : null,
+							phone : null,
+							cel : null,
+							address : null,
+							cnae : null,
+							document : null,
+							nickname : null,
+							note : null,
+							createDate : null,
+					},
+
+					items: null
 			}
 
 			// Function to get employee details from the database
@@ -71,15 +100,18 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 				$('#editForm').css('display', 'none');
 			}
 			$scope.insertInfo = function(info) {
-				$http.post($scope.apiUrl, 
+				$http.post('http://localhost:9000/invoice', 
 					JSON.stringify(info)).then(function(data) {
-						$rootScope.$broadcast('updateList');
-						init();
+						//$rootScope.$broadcast('updateList');
+						 $window.location.reload();
 				});
 			}
 			$scope.testList = function() {
 				
 				$rootScope.$broadcast('updateList');
+			}
+			$scope.removeItem = function() {
+				console.log("delete");
 			}
 			$scope.format = function(text) {
 				var position = text.indexOf(":");
@@ -114,7 +146,29 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 				$('#editForm').css('display', 'none');
 			}
 			
-		
+			$scope.localSearch = function(str) {
+				console.log(str);
+				var matches = [];
+
+					$http.get('http://localhost:9000/item?nome='+str)
+				
+				     .then(function successCallback(response) {
+							//response.data;
+						
+							console.log("Entrou" + response);
+						}, function errorCallback(response) {
+		    				console.log(response);
+		    		});
+
+				return matches;
+			};
+			$scope.selectedHandle = function ($item) {
+				console.log($item);
+				//$item.title // or description, or image - from your angucomplete attribute configuration
+				//$item.originalObject // the actual object which was selected
+				//this.$parent // the control which caused the change, contains useful things like $index for use in ng-repeat.
+
+			}
 
 	}
 
@@ -139,9 +193,10 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 				.then(function successCallback(response) {
 						$scope.details = response.data;
 						
-						console.log("Entrou" + response);
+						console.log(response.data);
 						}, function errorCallback(response) {
-		    			console.log(response);
+		    			console.log("erro");
+						console.log(response);
 		    		});
 				
 			}

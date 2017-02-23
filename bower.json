@@ -12,7 +12,8 @@
     "angular-loading-bar": "latest",
     "fontawesome": "latest",
     "simple-line-icons": "latest",
-    "chart.js": "^2.4.0"
+    "chart.js": "^2.4.0",
+    "angucomplete-alt": "^3.0.0"
   },
   "private": true
 }

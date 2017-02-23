@@ -17,7 +17,7 @@
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> </button>
                                     </span>
-                                    <input type="text" id="input1-group2" name="input1-group2" class="form-control" placeholder="Nome do cliente. Emissor, Mercadoria">
+                                    <input type="text" id="input1-group2" name="input1-group2" class="form-control" placeholder="Emissor, Mercadoria">
 
                                 </div>
                             </div>
@@ -46,67 +46,156 @@
 </div>
 
     <div class="row" ng-show="insert">
-        <div class="col-md-12">
+    
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
                     <strong>Dados </strong> <small>Básicos</small>
                 </div>
                 <div class="card-block">
-                    <form action="" method="post" enctype="multipart/form-data" class="form-horizontal ">
+                  <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="text-input">* Empresa</label>
+                            <div class="col-md-9">
+                                <input type="text" id="text-input" name="text-input" class="form-control" 
+                                        placeholder="Nome" ng-model="invoice.company.name">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="text-input">* CPF/CNPJ da Empresa</label>
+                            <div class="col-md-9">
+                                <input type="text" id="text-input" name="text-input" class="form-control" 
+                                        placeholder="Nome" ng-model="invoice.company.document">
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
                        <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="text-input">* Nome Completo</label>
+                            <label class="col-md-3 form-control-label" for="text-input">* Nome do cliente</label>
                             <div class="col-md-9">
-                                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Nome" ng-model="cliente.name">
+                                <input type="text" id="text-input" name="text-input" class="form-control" 
+                                        placeholder="Nome" ng-model="invoice.customer.name">
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="text-input">Telefone</label>
-                            <div class="col-md-4">
-                                <input type="text" id="text-input" name="text-input" class="form-control" placeholder="Tel" ng-model=" cliente.phone">
-                                <span class="help-block"></span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-3 form-control-label">Sexo</label>
+                       <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="text-input">* CPF/CNPJ do cliente</label>
                             <div class="col-md-9">
-                                <label class="radio-inline" for="inline-radio1">
-                                    <input type="radio" id="inline-radio1" name="inline-radios"  ng-model="cliente.gender" value="M"> Masculino
-                                </label>
-                                <label class="radio-inline" for="inline-radio2">
-                                    <input type="radio" ng-model="cliente.gender" id="inline-radio2" name="inline-radios" value="F"> Feminino
-                                </label>
-                                
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="email-input">Email</label>
-                            <div class="col-md-4">
-                                <input type="email" id="email-input" 
-                                ng-model="cliente.email"
-                                name="email-input" class="form-control" placeholder="Digite o e-mail">
+                                <input type="text" id="text-input" name="text-input" class="form-control" 
+                                        placeholder="Nome" ng-model="invoice.customer.document">
                                 <span class="help-block"></span>
                             </div>
                         </div>
-                        
+                  
                         
                         <div class="form-group row">
                             <label class="col-md-3 form-control-label" for="textarea-input">Observações</label>
                             <div class="col-md-9">
-                                <textarea ng-model="cliente.note" id="textarea-input" name="textarea-input" rows="9" class="form-control" placeholder="Outras observações"></textarea>
+                                <textarea ng-model="invoice.note" id="textarea-input" name="textarea-input" 
+                                rows="9" class="form-control" placeholder="Outras observações"></textarea>
                             </div>
                         </div>
                         
-                    </form>
+                    
                 </div>
                 <div class="card-footer">
-                    <button type="submit" class="btn btn-sm btn-primary" ng-click="insertInfo(cliente)" ><i class="fa fa-dot-circle-o"></i> Salvar</button>
+                    <button type="submit" class="btn btn-sm btn-primary" ng-click="insertInfo(invoice)" ><i class="fa fa-dot-circle-o"></i> Salvar</button>
                     <button type="reset" class="btn btn-sm btn-danger" ng-click="init()"><i class="fa fa-ban"></i> Limpar</button>
                 </div>
             </div>   
         </div>
+        
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fa fa-align-justify"></i> Mercadorias
+                </div>
+                
+                <div class="card-block">
+                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-primary"><i class="fa fa-search"></i> </button>
+                                    </span>
+                                   <!--<angucomplete-alt id="members"
+                                        placeholder="Buscar Items"
+                                        pause="400"
+                                        selected-object="item"
+                                        remote-url="http://localhost:9000/item?nome="
+                                        remote-url-data-field="invoice.items"
+                                        title-field="name"
+                                        description-field="name"
+                                        image-field="profilePic"
+                                        input-class="form-control form-control-small"/>-->
+                                        <angucomplete-alt id="ex2"
+                                            placeholder="Buscar Items"
+                                            pause="300"
+                                            selected-object="selectedHandle"
+                                            local-data="item"
+                                            local-search="localSearch"
+                                            title-field="name"
+                                            description-field="name"
+                                            image-field="pic"
+                                            minlength="1"
+                                            input-class="form-control form-control-small"
+                                            match-class="highlight" />
 
+                                    
+                                </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Valor</th>
+                                <th></th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="item in invoice.items">
+                                <td>{{item.name}}</td>
+                                <td>{{item.price}}</td>
+                                <td><span class="btn btn-danger btn-sm"  ng-click="removeItem()" >
+                                <i class="fa fa-remove"></span></td>
+                               
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" href="#">Prev</a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">4</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                    <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="text-input">Valor da Nota</label>
+                            <div class="col-md-3">
+                                <input type="text" id="text-input" name="text-input" class="form-control" 
+                                         ng-model="invoice.total" disabled>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                         <div class="form-group row">
+                            <label class="col-md-3 form-control-label" for="text-input">Impostos</label>
+                            <div class="col-md-3">
+                                <input type="text" id="text-input" name="text-input" class="form-control" 
+                                         ng-model="invoice.totalTaxes" disabled>
+                                <span class="help-block"></span>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
     </div>
+   
     <!--/.row-->
     
     
@@ -130,6 +219,7 @@
                                 <th>Numero da Nota</th>
                                 <th>Cliente</th>
                                 <th>Emissor</th>
+                               
                                 <th>Valor</th>
                                 <th>impostos</th>
                                 <th>Status</th>
@@ -142,6 +232,7 @@
                                 <td>{{detail.id}}</td>
                                 <td>{{detail.customer.name}}</td>
                                 <td>{{detail.company.name}}</td>
+                                
                                 <td>
                                     <span class="tag tag-success">{{detail.total}}</span>
                                 </td>
