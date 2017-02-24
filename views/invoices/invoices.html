@@ -21,7 +21,7 @@
                                     ng-model="termInvoice"
                                     ng-keyup="filterByCompanyOrItem()"
                                     id="input1-group2" name="input1-group2" 
-                                    class="form-control" placeholder="Emissor, Mercadoria">
+                                    class="form-control" placeholder="Nome Emissor ou Nome da Mercadoria... digite 3 letras">
 
                                 </div>
                             </div>
@@ -66,10 +66,11 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-3 form-control-label" for="text-input">* CPF/CNPJ da Empresa</label>
+                            <label class="col-md-3 form-control-label" for="text-input">* CNPJ da Empresa</label>
                             <div class="col-md-9">
                                 <input type="text" id="text-input" name="text-input" class="form-control" 
-                                        placeholder="Nome" ng-model="invoice.company.document">
+                                ui-br-cnpj-mask
+                                        placeholder="CNPJ" ng-model="invoice.company.document">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -85,7 +86,8 @@
                             <label class="col-md-3 form-control-label" for="text-input">* CPF/CNPJ do cliente</label>
                             <div class="col-md-9">
                                 <input type="text" id="text-input" name="text-input" class="form-control" 
-                                        placeholder="Nome" ng-model="invoice.customer.document">
+                                ui-br-cpfcnpj-mask
+                                        placeholder="CPF/CNPJ" ng-model="invoice.customer.document">
                                 <span class="help-block"></span>
                             </div>
                         </div>
@@ -125,7 +127,7 @@
                                         id="input1-group2" 
                                         name="input1-group2" 
                                         class="form-control" 
-                                        placeholder="Buscar Items">
+                                        placeholder="Buscar Items... digite 3 letras">
                                                                            
                                 </div>
                                 <div class="card" ng-if="items.length > 0">
@@ -175,6 +177,7 @@
                                 <td>{{item.name}}</td>
                                 <td>{{item.price}}</td>
                                 <td><input type="text" 
+                                ui-number-mask
                                         ng-model="item.quantity"
                                         ng-keyup="updateItems($index)"
                                         id="input1-group2" 

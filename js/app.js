@@ -17,7 +17,8 @@ angular
         'oc.lazyLoad',
         'ncy-angular-breadcrumb',
         'angular-loading-bar',
-        'angucomplete-alt'
+        'ui.utils.masks',
+        'ngNotify'
     ])
     .config(['cfpLoadingBarProvider', function(cfpLoadingBarProvider) {
         cfpLoadingBarProvider.includeSpinner = false;

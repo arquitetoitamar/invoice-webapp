@@ -5,8 +5,8 @@ angular
 	.controller('invoiceController', invoiceController)
 	.controller('invoiceListController', invoiceListController);
 
-invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$rootScope'];
-		function invoiceController($scope, $http, $timeout,$window,$log,$rootScope) {
+invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$rootScope','ngNotify'];
+		function invoiceController($scope, $http, $timeout,$window,$log,$rootScope,ngNotify) {
   			
   			$scope.vm = this;
   			$scope.details = null;
@@ -101,11 +101,33 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 				$('#empForm').slideToggle();
 				$('#editForm').css('display', 'none');
 			}
-			$scope.insertInfo = function(info) {
-				console.log(info);
+			$scope.insertInfo = function(invoice) {
+				if(invoice.company.name == null || invoice.company.name == ''){
+					ngNotify.set('Informe o nome da Empresa!', 'error');
+					return false;
+				}
+				if(invoice.company.document == null ){
+					ngNotify.set('Informe um cnpj válido para a Empresa!', 'error');
+					return false;
+				}
+				if(invoice.customer.name == null || invoice.customer.name == ''){
+					ngNotify.set('Informe o nome o cliente!', 'error');
+					return false;
+				}
+				if(invoice.customer.document == null || invoice.customer.document == ''){
+					ngNotify.set('Informe um cpf/cnpj válido para o cliente!', 'error');
+					return false;
+				}
+				if(invoice.items.length == 0 || invoice.items == null){
+					ngNotify.set('Selecione um item par a nota fiscal!', 'error');
+					return false;
+				}
+				
+				console.log(invoice);
 				$http.post('http://localhost:9000/invoice', 
-					JSON.stringify(info)).then(function(data) {
+					JSON.stringify(invoice)).then(function(data) {
 						//$rootScope.$broadcast('updateList');
+						 ngNotify.set('Salvo com Sucesso!', 'success');
 						 $window.location.reload();
 				});
 			}
@@ -134,7 +156,7 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 				var total =  parseFloat($scope.invoice.total) - parseFloat($scope.invoice.items[$index].price);
 				$scope.invoice.total = total;
 				$scope.qtdeItems = $scope.qtdeItems - 1;
-				$scope.invoice.items.splice($index,1);    
+				
 			}
 			$scope.addItem = function(item) {
 				item.quantity = 1;
@@ -208,9 +230,9 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 
 	}
 
-	invoiceListController.$inject = ['$scope', '$http', '$timeout', '$window','$log', '$rootScope'];
+	invoiceListController.$inject = ['$scope', '$http', '$timeout', '$window','$log', '$rootScope', 'ngNotify'];
 		function invoiceListController($scope, $http, 
-			$timeout,$window,$log, $rootScope) {
+			$timeout,$window,$log, $rootScope,ngNotify) {
   			
   			$scope.details = null;
   			$scope.loadList = getInfo();
@@ -232,7 +254,7 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 				console.log(term);
 				$scope.items = [];
 				if(term.length > 2) {
-					$http.get('http://localhost:9000/invoice?filteByCompanyOrItem='+term)
+					$http.get('http://localhost:9000/invoice?name='+term)
 				
 				     .then(function successCallback(response) {
 							//response.data;
@@ -247,6 +269,7 @@ invoiceController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$r
 				
 			}
 			function getInfo() {
+				
 				$http.get('http://localhost:9000/invoice')
 				
 				.then(function successCallback(response) {

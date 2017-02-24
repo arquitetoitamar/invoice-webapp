@@ -35,6 +35,10 @@ angular
                             serie: true,
                             name: 'Simple Line Icons',
                             files: ['css/simple-line-icons.css']
+                        },{
+                            serie: true,
+                            name: 'ng notify',
+                            files: ['bower_components/ng-notify/dist/ng-notify.min.css']
                         }]);
                     }],
                     

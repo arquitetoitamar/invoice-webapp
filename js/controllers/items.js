@@ -5,13 +5,13 @@ angular
 	.controller('itemController', itemController)
 	.controller('itemListController', itemListController);
 
-itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$rootScope'];
-		function itemController($scope, $http, $timeout,$window,$log,$rootScope) {
+itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$rootScope','ngNotify'];
+		function itemController($scope, $http, $timeout,$window,$log,$rootScope,ngNotify) {
   			
   			$scope.vm = this;
   			$scope.details = null;
 			$scope.term = '';
-
+			
 
   			$scope.cliente =  {
 			      name : "",
@@ -67,6 +67,14 @@ itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$root
 				}
 				
 			};
+			
+			
+			$scope.edit = function(data) {
+				console.log("editan");
+				$scope.item = data;
+				$scope.insert =true;
+				
+			}
 
 			$scope.setPage = function (pageNo) {
     			$scope.currentPage = pageNo;
@@ -87,11 +95,18 @@ itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$root
 				$('#empForm').slideToggle();
 				$('#editForm').css('display', 'none');
 			}
-			$scope.insertInfo = function(info) {
+			$scope.insertInfo = function(item) {
+				if(item.name == null || item.name == ''){
+					ngNotify.set('Informe o nome do item!', 'error');
+					return false;
+				}
+				if(item.price == null || item.price == ''){
+					ngNotify.set('Informe o valor do item!', 'error');
+					return false;
+				}
 				$http.post('http://localhost:9000/item', 
-					JSON.stringify(info)).then(function(data) {
-						$rootScope.$broadcast('updateList');
-						init();
+					JSON.stringify(item)).then(function(data) {
+						 $window.location.reload();
 				});
 			}
 			$scope.testList = function() {
@@ -103,16 +118,7 @@ itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$root
 				
 				return text.substring(position + 1, text.length);
 			}
-			$scope.deleteInfo = function(detail) {
-				detail.emp_id = $scope.format(detail.$$hashKey);
-				detail.$$hashKey = null;
-				console.log("excluindo: "+JSON.stringify(detail));
-				$http.delete('http://localhost:9000/item', JSON.stringify(detail)).success(function(data) {
-					if (data == true) {
-						getInfo();
-					}
-				});
-			}
+			
 			$scope.currentUser = {};
 			$scope.editInfo = function(info) {
 				$scope.currentUser = info;
@@ -131,6 +137,10 @@ itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$root
 				$('#editForm').css('display', 'none');
 			}
 			
+			$rootScope.$on("edit", function(event,args){
+				console.log("edit");
+           		$scope.edit(args.item);
+        	});
 		
 
 	}
@@ -147,7 +157,9 @@ itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$root
 				console.log("update list");
            		getInfo();
         	});
-
+			$scope.edit = function(item){
+				$rootScope.$broadcast('edit',{ item: item});
+			}
 			function getInfo() {
 				$http.get('http://localhost:9000/item?page=0&size=20')
 				
@@ -159,5 +171,15 @@ itemController.$inject = ['$scope', '$http', '$timeout', '$window','$log','$root
 		    			console.log(response);
 		    		});
 				
+			}
+			$scope.remove = function(item) {
+				
+				console.log("excluindo: "+JSON.stringify(item));
+				$http.delete('http://localhost:9000/item', JSON.stringify(detail)).success(function(data) {
+					
+						
+						getInfo();
+				
+				});
 			}
     }

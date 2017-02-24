@@ -13,7 +13,8 @@
     "fontawesome": "latest",
     "simple-line-icons": "latest",
     "chart.js": "^2.4.0",
-    "angucomplete-alt": "^3.0.0"
+    "angular-input-masks": "^2.5.0",
+    "ng-notify": "^0.8.0"
   },
   "private": true
 }
